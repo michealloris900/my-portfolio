@@ -160,148 +160,318 @@
 
         /* Hero Section */
         #hero {
-            min-height: 100vh;
-            /* background: linear-gradient(135deg, #8B4513 0%, #3E2723 100%); */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: var(--cream);
-            padding: 100px 20px 20px;
-            position: relative;
-            overflow: hidden;
-        }
+    /* Pastikan full viewport height */
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    
+    /* Pastikan full width */
+    width: 100vw;
+    max-width: 100%;
+    
+    /* Background dengan foto Anda - PERBAIKAN OPACITY */
+    background: 
+        linear-gradient(135deg, 
+            rgba(62, 39, 35, 0.75) 0%,    /* Kurangi dari 0.85 ke 0.75 */
+            rgba(0, 0, 0, 0.6) 100%      /* Kurangi dari 0.7 ke 0.6 */
+        ),
+        url('bgall.webp') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+    
+    /* Pusatkan konten dengan flexbox */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    /* Reset semua spacing */
+    margin: 0;
+    padding: 0;
+    position: relative;
+    
+    /* Pastikan di atas semua elemen */
+    z-index: 1;
+}
 
-        #hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            /* background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23000000" width="100" height="100"/><rect fill="%23ffffff" opacity="0.03" width="100" height="100"/></svg>'); */
-            pointer-events: none;
-        }
+#hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg, 
+        rgba(62, 39, 35, 0.85) 0%, 
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    z-index: 1;
+}
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            animation: fadeInUp 1s ease-out;
-        }
+#hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(to top, var(--color-dark-wood), transparent);
+    z-index: 1;
+}
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-family: Georgia, serif;
-            margin-bottom: 1rem;
-            color: var(--accent-gold);
-            animation: fadeIn 0.8s ease-out;
-        }
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    animation: fadeInUp 1s ease-out;
+}
 
-        .hero-content .subtitle {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: var(--cream);
-            animation: fadeIn 0.8s ease-out 0.3s both;
-        }
+.hero-content h1 {
+    font-size: 4.5rem;
+    font-family: var(--font-serif);
+    margin-bottom: 0.5rem;
+    color: var(--color-accent-gold);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    line-height: 1.1;
+    letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+}
 
-        .hero-content .tagline {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            color: var(--cream);
-            animation: fadeIn 0.8s ease-out 0.6s both;
-        }
+.hero-content h1::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-gold), transparent);
+}
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
+.hero-content .subtitle {
+    font-size: 2.2rem;
+    font-weight: 300;
+    margin: 2rem 0 1.5rem;
+    color: var(--color-cream);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    animation: fadeIn 0.8s ease-out 0.3s both;
+    font-family: var(--font-sans);
+    letter-spacing: 1px;
+}
 
-        .scroll-indicator::before {
-            content: '↓';
-            font-size: 2rem;
-            color: var(--color-accent-gold);
-        }
+.hero-content .tagline {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 1.5rem auto 2.5rem;
+    color: var(--color-light-cream);
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    animation: fadeIn 0.8s ease-out 0.6s both;
+    font-family: var(--font-sans);
+}
 
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeIn 0.8s ease-out 0.9s both;
-        }
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeIn 0.8s ease-out 0.9s both;
+    margin: 2rem 0;
+}
 
-        .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-        }
+.btn {
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    overflow: hidden;
+    min-width: 180px;
+}
 
-        .btn-primary {
-            background: var(--accent-gold);
-            color: var(--dark-wood);
-        }
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
 
-        .btn-primary:hover {
-            background: #E8B850;
-            transform: scale(1.05);
-        }
+.btn:hover::before {
+    left: 100%;
+}
 
-        .btn-secondary {
-            background: transparent;
-            color: var(--cream);
-            border: 2px solid var(--accent-gold);
-        }
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-accent-gold), var(--color-burnt-orange));
+    color: var(--color-dark-wood);
+    box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+    border: none;
+}
 
-        .btn-secondary:hover {
-            background: var(--accent-gold);
-            color: var(--dark-wood);
-            transform: scale(1.05);
-        }
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-burnt-orange), var(--color-accent-gold));
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(212, 165, 116, 0.6);
+}
 
-        .social-icons {
-            margin-top: 3rem;
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            animation: fadeIn 0.8s ease-out 1.2s both;
-        }
+.btn-outline {
+    background: transparent;
+    color: var(--color-accent-gold);
+    border: 3px solid var(--color-accent-gold);
+    position: relative;
+}
 
-        .social-icons a {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            color: var(--dark-wood);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
+.btn-outline:hover {
+    background: var(--color-accent-gold);
+    color: var(--color-dark-wood);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(212, 165, 116, 0.4);
+}
 
-        .social-icons a:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.4);
-        }
+.btn-icon {
+    font-size: 1.3em;
+}
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
+.social-icons {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    animation: fadeIn 0.8s ease-out 1.2s both;
+}
+
+.social-icons a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(212, 165, 116, 0.2);
+    color: var(--color-accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent;
+}
+
+.social-icons a:hover {
+    background: var(--color-accent-gold);
+    color: var(--color-dark-wood);
+    transform: translateY(-8px) rotate(360deg);
+    box-shadow: 0 10px 25px rgba(212, 165, 116, 0.5);
+    border-color: var(--color-accent-gold);
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    animation: bounce 2s infinite;
+    opacity: 0.8;
+}
+
+.scroll-indicator::before {
+    content: '⌄';
+    font-size: 3rem;
+    color: var(--color-accent-gold);
+    font-weight: bold;
+    display: block;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* Floating elements decoration */
+.floating-element {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.floating-element.code {
+    top: 20%;
+    left: 10%;
+    font-size: 4rem;
+    color: var(--color-accent-gold);
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-element.chart {
+    bottom: 20%;
+    right: 10%;
+    font-size: 4rem;
+    color: var(--color-accent-gold);
+    animation: float 8s ease-in-out infinite 1s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #hero {
+        /* Nonaktifkan parallax di mobile */
+        background-attachment: scroll;
+        
+        /* Kurangi padding atas untuk mobile */
+        padding-top: 70px;
+        
+        /* Pastikan fullscreen di mobile */
+        height: 100vh;
+        min-height: 100vh;
+    }
+    
+    .hero-content {
+        /* Tambah padding atas ekstra di mobile */
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    
+    /* Pastikan teks tidak ketutup */
+    .hero-content h1 {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content .subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+}
 
         /* Section Styles */
         section {
@@ -1281,23 +1451,37 @@
         </div>
     </nav>
 
+
     <!-- Hero Section -->
-    <section id="hero">
-        <div class="hero-content">
-            <h2>Selamat Datang di Portfolio Saya</h2>
-            <p class="subtitle">Data Analyst & Full-Stack Developer</p>
-            <p class="tagline">Mengubah Data Menjadi Insight • Kode Menjadi Solusi</p>
-            <div class="cta-buttons">
-                <a href="#portfolio" class="project-link">Lihat Portfolio</a>
-                <a href="#contact" class="project-link">Hubungi Saya</a>
-            </div>
-            <div class="social-icons">
-                <a href="#" title="GitHub">🔗</a>
-                <a href="#" title="LinkedIn">💼</a>
-                <a href="mailto:hello@example.com" title="Email">✉️</a>
-            </div>
-        <!-- <div class="scroll-indicator"></div> -->
-    </section>
+<section id="hero">
+    <!-- Floating decorative elements -->
+    <div class="floating-element code">{ }</div>
+    <div class="floating-element chart">📊</div>
+    
+    <div class="hero-content">
+        <h1>Hi, I'm [Nama Anda]</h1>
+        <div class="subtitle">Data Analyst & Full-Stack Developer</div>
+        
+        <p class="tagline">
+            Mengubah data kompleks menjadi wawasan bisnis yang dapat ditindaklanjuti dan membangun solusi web yang skalabel untuk pertumbuhan UMKM.
+        </p>
+
+        <div class="cta-buttons">
+            <!-- Tombol Utama -->
+            <a href="#portfolio" class="btn btn-primary">
+                Lihat Portfolio
+            </a>
+            
+            <!-- Tombol Download CV Baru -->
+            <a href="cv-nama-anda.pdf" download class="btn btn-outline">
+                <span class="btn-icon">⬇</span> Download CV
+            </a>
+        </div>
+
+       
+    </div>
+</section>
+    
 
     <!-- About Section -->
     <section id="about">
@@ -1413,7 +1597,7 @@
 <div class="project-card" data-category="web-development">
     <div class="project-thumbnail">
         <div class="project-thumbnail-inner">
-            <img src="web-development/project3/screenshot_1.jpg" alt="Sistem Manajemen Inventori">
+            <img src="web-development/project3/Screenshot_1.jpg" alt="Sistem Manajemen Inventori">
         </div>
     </div>
     <div class="project-content">
@@ -1479,21 +1663,8 @@
     </div>
 </div>
 
-            <!-- LandingPage 01-->
-            <div class="project-card" data-category="LandingPage">
-                <div class="project-thumbnail">
-                    <div class="project-thumbnail-inner"><img src="LandingPage/barbertumb.jpg" alt="">
-                    </div>
-                </div>
-                <div class="project-content">
-                    <span class="project-category">LandingPage</span>
-                    <h3>Bray Barber site</h3>
-                    <p>Halaman penjualan produk yang dirancang untuk meningkatkan konversi, dilengkapi dengan product showcase, testimonial pelanggan, dan call-to-action yang efektif</p>
-                    <a href="https://barber-site-eta.vercel.app/" class="project-link">Lihat Proyek</a>
-                </div>
-            </div>
 
-            <!-- LandingPage 02-->
+            <!-- LandingPage 01-->
             <div class="project-card" data-category="LandingPage">
                 <div class="project-thumbnail">
                     <div class="project-thumbnail-inner"><img src="LandingPage/Beauty Of Angel/tumbb.jpg" alt="">
@@ -1506,8 +1677,7 @@
                     <a href="LandingPage/Beauty Of Angel/lp_Beauty_of_Angel.html" class="project-link">Lihat Proyek</a>
                 </div>
             </div>
-
-            <!-- LandingPage 03-->
+            <!-- LandingPage 02-->
             <div class="project-card" data-category="LandingPage">
                 <div class="project-thumbnail">
                     <div class="project-thumbnail-inner">
@@ -1522,8 +1692,20 @@
                     <a href="LandingPage/EyeCling/lp_EyeCling.html" class="project-link">Lihat Proyek</a>
                 </div>
             </div>
-
-            
+            <div class="project-card" data-category="LandingPage">
+                <div class="project-thumbnail">
+                    <div class="project-thumbnail-inner">
+                        <div class="project-thumbnail-icon">💻</div>
+                        <div class="project-thumbnail-label">LandingPage</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <span class="project-category">LandingPage</span>
+                    <h3>Proyek Web Development 3</h3>
+                    <p>Sistem database terintegrasi dengan interface user-friendly menggunakan MySQL/MongoDB dan Express.js.</p>
+                    <a href="#" class="project-link">Lihat Proyek</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1559,7 +1741,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 ROFIQ ABDULLOH. Dibuat dengan ❤️ dan kode.</p>
+        <p>&copy; 2025 ROFIQ ABDULLOH. Dibuat dengan ❤️ dan kode.</p>
     </footer>
 
     <!-- Popup Gallery for Web Development Projects -->
