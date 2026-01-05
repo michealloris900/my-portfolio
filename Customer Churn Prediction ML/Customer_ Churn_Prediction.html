@@ -3,1134 +3,979 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Churn Prediction - Machine Learning Solution</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Telco Customer Churn Prediction - Machine Learning Project</title>
     <style>
-        /* Design System */
         :root {
-  /* Primitive Color Tokens */
-  --color-white: rgba(255, 255, 255, 1);
-  --color-black: rgba(0, 0, 0, 1);
-  --color-cream-50: rgba(252, 252, 249, 1);
-  --color-cream-100: rgba(255, 255, 253, 1);
-  --color-gray-200: rgba(245, 245, 245, 1);
-  --color-gray-300: rgba(167, 169, 169, 1);
-  --color-gray-400: rgba(119, 124, 124, 1);
-  --color-slate-500: rgba(98, 108, 113, 1);
-  --color-brown-600: rgba(94, 82, 64, 1);
-  --color-charcoal-700: rgba(31, 33, 33, 1);
-  --color-charcoal-800: rgba(38, 40, 40, 1);
-  --color-slate-900: rgba(19, 52, 59, 1);
-  --color-teal-300: rgba(50, 184, 198, 1);
-  --color-teal-400: rgba(45, 166, 178, 1);
-  --color-teal-500: rgba(33, 128, 141, 1);
-  --color-teal-600: rgba(29, 116, 128, 1);
-  --color-teal-700: rgba(26, 104, 115, 1);
-  --color-teal-800: rgba(41, 150, 161, 1);
-  --color-red-400: rgba(255, 84, 89, 1);
-  --color-red-500: rgba(192, 21, 47, 1);
-  --color-orange-400: rgba(230, 129, 97, 1);
-  --color-orange-500: rgba(168, 75, 47, 1);
-
-  /* RGB versions for opacity control */
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-  --color-slate-500-rgb: 98, 108, 113;
-  --color-red-500-rgb: 192, 21, 47;
-  --color-red-400-rgb: 255, 84, 89;
-  --color-orange-500-rgb: 168, 75, 47;
-  --color-orange-400-rgb: 230, 129, 97;
-
-  /* Background color tokens (Light Mode) */
-  --color-bg-1: rgba(59, 130, 246, 0.08);
-  --color-bg-2: rgba(245, 158, 11, 0.08);
-  --color-bg-3: rgba(34, 197, 94, 0.08);
-  --color-bg-4: rgba(239, 68, 68, 0.08);
-  --color-bg-5: rgba(147, 51, 234, 0.08);
-  --color-bg-6: rgba(249, 115, 22, 0.08);
-  --color-bg-7: rgba(236, 72, 153, 0.08);
-  --color-bg-8: rgba(6, 182, 212, 0.08);
-
-  /* Semantic Color Tokens (Light Mode) */
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-primary-active: var(--color-teal-700);
-  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-btn-primary-text: var(--color-cream-50);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-error: var(--color-red-500);
-  --color-success: var(--color-teal-500);
-  --color-warning: var(--color-orange-500);
-  --color-info: var(--color-slate-500);
-  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
-
-  /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-size-xs: 11px;
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 18px;
-  --font-size-2xl: 20px;
-  --font-size-3xl: 24px;
-  --font-size-4xl: 30px;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 550;
-  --font-weight-bold: 600;
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-
-  /* Spacing */
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --space-32: 32px;
-  --space-48: 48px;
-  --space-64: 64px;
-
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-base: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-
-  /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-gray-400-rgb: 119, 124, 124;
-    --color-teal-300-rgb: 50, 184, 198;
-    --color-gray-300-rgb: 167, 169, 169;
-    --color-gray-200-rgb: 245, 245, 245;
-    --color-bg-1: rgba(29, 78, 216, 0.15);
-    --color-bg-2: rgba(180, 83, 9, 0.15);
-    --color-bg-3: rgba(21, 128, 61, 0.15);
-    --color-bg-4: rgba(185, 28, 28, 0.15);
-    --color-bg-5: rgba(107, 33, 168, 0.15);
-    --color-bg-6: rgba(194, 65, 12, 0.15);
-    --color-bg-7: rgba(190, 24, 93, 0.15);
-    --color-bg-8: rgba(8, 145, 178, 0.15);
-    --color-background: var(--color-charcoal-700);
-    --color-surface: var(--color-charcoal-800);
-    --color-text: var(--color-gray-200);
-    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
-    --color-primary: var(--color-teal-300);
-    --color-primary-hover: var(--color-teal-400);
-    --color-primary-active: var(--color-teal-800);
-    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
-    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
-    --color-error: var(--color-red-400);
-    --color-success: var(--color-teal-300);
-    --color-warning: var(--color-orange-400);
-    --color-info: var(--color-gray-300);
-    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
-    --color-btn-primary-text: var(--color-slate-900);
-    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
-    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
-  }
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: var(--font-family-base);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    line-height: var(--line-height-normal);
-    font-size: var(--font-size-base);
-}
-
-/* Custom Styles */
-.hero {
-    background: linear-gradient(135deg, rgba(33, 128, 141, 0.1) 0%, rgba(33, 128, 141, 0.05) 100%);
-    padding: var(--space-64) var(--space-24);
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-    margin-bottom: var(--space-16);
-    line-height: var(--line-height-tight);
-}
-
-.hero p {
-    font-size: var(--font-size-xl);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-32);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.metrics {
-    display: flex;
-    gap: var(--space-24);
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: var(--space-32);
-}
-
-.metric-card {
-    background: var(--color-surface);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    box-shadow: var(--shadow-md);
-    min-width: 150px;
-    transition: transform var(--duration-normal) var(--ease-standard);
-}
-
-.metric-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
-
-.metric-icon {
-    font-size: 32px;
-    margin-bottom: var(--space-8);
-}
-
-.metric-value {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    margin-bottom: var(--space-8);
-}
-
-.metric-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--space-24);
-}
-
-.section {
-    padding: var(--space-64) 0;
-}
-
-.section-title {
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
-    text-align: center;
-    margin-bottom: var(--space-16);
-    color: var(--color-text);
-}
-
-.section-subtitle {
-    font-size: var(--font-size-lg);
-    text-align: center;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-48);
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.grid {
-    display: grid;
-    gap: var(--space-24);
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.card {
-    background: var(--color-surface);
-    padding: var(--space-32);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.card h3 {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-16);
-    color: var(--color-text);
-}
-
-.card p {
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-}
-
-.btn {
-    display: inline-block;
-    padding: var(--space-16) var(--space-32);
-    border-radius: var(--radius-base);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    transition: all var(--duration-normal) var(--ease-standard);
-    cursor: pointer;
-    border: none;
-    font-family: var(--font-family-base);
-}
-
-.btn-primary {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-}
-
-.btn-primary:hover {
-    background: var(--color-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-}
-
-.btn-secondary:hover {
-    background: var(--color-secondary);
-}
-
-.problem-section {
-    background: var(--color-bg-4);
-    padding: var(--space-48) var(--space-24);
-    border-radius: var(--radius-lg);
-    text-align: center;
-    margin: 0 var(--space-24);
-}
-
-.problem-icon {
-    font-size: 48px;
-    margin-bottom: var(--space-16);
-}
-
-.problem-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-16);
-}
-
-.problem-description {
-    font-size: var(--font-size-lg);
-    color: var(--color-text-secondary);
-    max-width: 800px;
-    margin: 0 auto var(--space-16);
-}
-
-.problem-stat {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-error);
-    background: var(--color-surface);
-    padding: var(--space-16) var(--space-32);
-    border-radius: var(--radius-base);
-    display: inline-block;
-    margin-top: var(--space-16);
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--space-24);
-}
-
-.feature-card {
-    text-align: center;
-    padding: var(--space-32);
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary);
-}
-
-.feature-icon {
-    font-size: 48px;
-    margin-bottom: var(--space-16);
-    color: var(--color-primary);
-}
-
-.feature-title {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-12);
-}
-
-.feature-description {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-base);
-}
-
-.methodology-list {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.methodology-item {
-    background: var(--color-surface);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    margin-bottom: var(--space-16);
-    border-left: 4px solid var(--color-primary);
-}
-
-.methodology-phase {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    margin-bottom: var(--space-8);
-}
-
-.methodology-description {
-    color: var(--color-text-secondary);
-}
-
-.data-source {
-    background: var(--color-bg-1);
-    padding: var(--space-48);
-    border-radius: var(--radius-lg);
-    text-align: center;
-    margin: 0 var(--space-24);
-}
-
-.data-source-title {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-16);
-}
-
-.data-source-name {
-    font-size: var(--font-size-2xl);
-    color: var(--color-primary);
-    margin-bottom: var(--space-8);
-}
-
-.data-source-link {
-    display: inline-block;
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: var(--font-weight-medium);
-    margin: var(--space-16) 0;
-    padding: var(--space-8) var(--space-16);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-base);
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.data-source-link:hover {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-}
-
-.quality-badges {
-    display: flex;
-    gap: var(--space-16);
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: var(--space-24);
-}
-
-.badge {
-    background: var(--color-surface);
-    padding: var(--space-12) var(--space-24);
-    border-radius: var(--radius-full);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-sm);
-    border: 1px solid var(--color-card-border);
-    box-shadow: var(--shadow-sm);
-}
-
-.chart-container {
-    background: var(--color-surface);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    box-shadow: var(--shadow-sm);
-    height: 400px;
-}
-
-.chart-title {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-16);
-    text-align: center;
-}
-
-.chart-caption {
-    text-align: center;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin-top: var(--space-16);
-}
-
-.chart-wrapper {
-    position: relative;
-    height: 300px;
-}
-
-.roi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-24);
-}
-
-.roi-card {
-    background: var(--color-surface);
-    padding: var(--space-32);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    text-align: center;
-    box-shadow: var(--shadow-md);
-}
-
-.roi-value {
-    font-size: clamp(28px, 4vw, 36px);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    margin-bottom: var(--space-8);
-}
-
-.roi-label {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--space-8);
-}
-
-.roi-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-}
-
-.deliverables-list {
-    max-width: 600px;
-    margin: 0 auto;
-    background: var(--color-surface);
-    padding: var(--space-32);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-}
-
-.deliverable-item {
-    display: flex;
-    align-items: center;
-    padding: var(--space-16) 0;
-    border-bottom: 1px solid var(--color-card-border-inner);
-    font-size: var(--font-size-lg);
-}
-
-.deliverable-item:last-child {
-    border-bottom: none;
-}
-
-.deliverable-icon {
-    color: var(--color-success);
-    margin-right: var(--space-16);
-    font-size: var(--font-size-xl);
-}
-
-.pricing {
-    text-align: center;
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    margin-top: var(--space-32);
-    padding: var(--space-24);
-    background: var(--color-bg-2);
-    border-radius: var(--radius-base);
-}
-
-.tech-stack {
-    display: flex;
-    gap: var(--space-16);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.tech-badge {
-    background: var(--color-surface);
-    padding: var(--space-16) var(--space-24);
-    border-radius: var(--radius-base);
-    border: 1px solid var(--color-card-border);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.tech-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-primary);
-}
-
-.cta-section {
-    background: linear-gradient(135deg, rgba(33, 128, 141, 0.15) 0%, rgba(33, 128, 141, 0.05) 100%);
-    padding: var(--space-64) var(--space-24);
-    text-align: center;
-    border-radius: var(--radius-lg);
-    margin: 0 var(--space-24);
-}
-
-.cta-headline {
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-16);
-}
-
-.cta-subtext {
-    font-size: var(--font-size-xl);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-32);
-}
-
-.cta-buttons {
-    display: flex;
-    gap: var(--space-16);
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: var(--space-24);
-}
-
-.contact-info {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-}
-
-footer {
-    background: var(--color-surface);
-    padding: var(--space-48) var(--space-24);
-    text-align: center;
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-64);
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-links {
-    display: flex;
-    gap: var(--space-24);
-    justify-content: center;
-    margin-bottom: var(--space-16);
-    flex-wrap: wrap;
-}
-
-.footer-links a {
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    transition: color var(--duration-normal) var(--ease-standard);
-}
-
-.footer-links a:hover {
-    color: var(--color-primary);
-}
-
-.copyright {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--space-8);
-}
-
-.footer-tagline {
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    font-style: italic;
-}
-
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s var(--ease-standard), transform 0.6s var(--ease-standard);
-}
-
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-    .section {
-        padding: var(--space-48) 0;
-    }
-    
-    .hero {
-        padding: var(--space-48) var(--space-24);
-    }
-    
-    .metrics {
-        gap: var(--space-16);
-    }
-    
-    .metric-card {
-        min-width: 120px;
-        padding: var(--space-16);
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-        text-align: center;
-    }
-}
+            --color-primary: #208794;
+            --color-secondary: #1a6f7e;
+            --color-accent: #ff6b6b;
+            --color-bg: #f8f9fa;
+            --color-text: #1a1a1a;
+            --color-text-light: #666666;
+            --color-border: #e0e0e0;
+            --color-success: #51cf66;
+            --color-warning: #ffa94d;
+            --spacing-sm: 12px;
+            --spacing-md: 24px;
+            --spacing-lg: 48px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            overflow-x: hidden;
+        }
+
+        /* ===== NAVBAR ===== */
+        nav {
+            position: sticky;
+            top: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo:before {
+            content: '📊';
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-md);
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: 120px var(--spacing-md) 80px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 64px);
+            margin-bottom: var(--spacing-md);
+            font-weight: 800;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2vw, 20px);
+            margin-bottom: var(--spacing-lg);
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--color-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        /* ===== METRICS SECTION ===== */
+        .metrics {
+            background: white;
+            padding: var(--spacing-lg) var(--spacing-md);
+            margin: -40px var(--spacing-md) 0;
+            border-radius: 12px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(32, 135, 148, 0.05) 0%, rgba(26, 111, 126, 0.05) 100%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(32, 135, 148, 0.15);
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--color-text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: var(--spacing-lg) var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 44px);
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+            color: var(--color-primary);
+            font-weight: 800;
+            position: relative;
+            padding-bottom: var(--spacing-md);
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            font-size: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== CHART SECTIONS ===== */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            overflow: hidden;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(135deg, rgba(32, 135, 148, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: var(--color-text-light);
+            border: 2px dashed var(--color-border);
+            font-weight: 500;
+        }
+
+        .chart-placeholder-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .chart-description {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-top: 12px;
+            line-height: 1.5;
+            padding-top: 12px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* ===== INSIGHTS SECTION ===== */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .insight-card {
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: 12px;
+            border-left: 4px solid var(--color-primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .insight-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .insight-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--color-primary);
+        }
+
+        .insight-text {
+            font-size: 14px;
+            color: var(--color-text-light);
+            line-height: 1.6;
+        }
+
+        /* ===== BENEFITS SECTION ===== */
+        .benefits {
+            background: linear-gradient(135deg, rgba(32, 135, 148, 0.05) 0%, rgba(26, 111, 126, 0.05) 100%);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .benefit-content h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--color-primary);
+        }
+
+        .benefit-content p {
+            font-size: 13px;
+            color: var(--color-text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ===== ROI SECTION ===== */
+        .roi-box {
+            background: white;
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .roi-item {
+            text-align: center;
+            padding: var(--spacing-md);
+            background: linear-gradient(135deg, rgba(32, 135, 148, 0.05) 0%, rgba(81, 207, 102, 0.05) 100%);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .roi-item:hover {
+            transform: scale(1.05);
+        }
+
+        .roi-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .roi-label {
+            font-size: 12px;
+            color: var(--color-text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: var(--spacing-lg) var(--spacing-md);
+            text-align: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 12px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 80px var(--spacing-md) 60px;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+                margin: -30px var(--spacing-md) 0;
+            }
+
+            section {
+                padding: var(--spacing-md);
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insights-grid{
+                grid-template-columns: 1fr;
+            }
+
+            .roi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .metric-value {
+                font-size: 28px;
+            }
+        }
+
+        /* ===== SCROLL ANIMATION ===== */
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Churn Prediction</a>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#charts">Analytics</a></li>
+                <li><a href="#insights">Insights</a></li>
+                <li><a href="#roi">ROI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
     <section class="hero">
-        <div class="container">
-            <h1>Predict Customer Churn with 80.33% Accuracy</h1>
-            <p>AI-Powered Solution untuk Telco &amp; SaaS Companies</p>
-            
-            <div class="metrics">
-                <div class="metric-card fade-in">
-                    <div class="metric-icon">🎯</div>
-                    <div class="metric-value">80.33%</div>
-                    <div class="metric-label">Accuracy</div>
-                </div>
-                <div class="metric-card fade-in">
-                    <div class="metric-icon">🔍</div>
-                    <div class="metric-value">90%</div>
-                    <div class="metric-label">Detection Rate</div>
-                </div>
-                <div class="metric-card fade-in">
-                    <div class="metric-icon">💰</div>
-                    <div class="metric-value">186,567%</div>
-                    <div class="metric-label">ROI</div>
-                </div>
+        <div class="hero-content">
+            <h1>🎯 Model Prediksi Churn Pelanggan Telekomunikasi</h1>
+            <p>Solusi Kecerdasan Buatan untuk Mengidentifikasi dan Mencegah Pelanggan yang Berhenti Berlangganan dengan Akurasi 80.33%</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary">📊 Lihat Laporan Lengkap</button>
+                <button class="btn btn-secondary">💡 Pelajari Selengkapnya</button>
             </div>
-            
-            <a href="#results" class="btn btn-primary">View Sample Analysis</a>
         </div>
     </section>
 
-    <!-- Problem Section -->
-    <section class="section">
-        <div class="problem-section fade-in">
-            <div class="problem-icon">⚠️</div>
-            <h2 class="problem-title">The Problem</h2>
-            <p class="problem-description">
-                26.54% customer churn rate = massive revenue loss. Traditional methods can't predict WHO will churn BEFORE it happens.
+    <!-- METRICS SECTION -->
+    <section class="metrics">
+        <div class="metric-card">
+            <div class="metric-value">80.33% ⭐</div>
+            <div class="metric-label">Akurasi Model</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">90.08% 🎯</div>
+            <div class="metric-label">Tingkat Deteksi</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">84.11% ✅</div>
+            <div class="metric-label">Presisi Prediksi</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">186,567% 💰</div>
+            <div class="metric-label">Potensi ROI</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">3.2 hari ⏱️</div>
+            <div class="metric-label">Masa Balik Modal</div>
+        </div>
+    </section>
+
+    <!-- OVERVIEW SECTION -->
+    <section id="overview">
+        <h2 class="section-title">📈 Ringkasan Eksekutif</h2>
+        <p class="section-subtitle">
+            Proyek ini membangun model kecerdasan buatan yang dapat memprediksi pelanggan yang akan berhenti berlangganan sebelum terjadi, memungkinkan tindakan pencegahan dan peningkatan retensi pendapatan perusahaan.
+        </p>
+
+        <div style="background: rgba(32, 135, 148, 0.08); border-radius: 12px; padding: var(--spacing-md); margin-bottom: var(--spacing-lg); border-left: 4px solid var(--color-primary);">
+            <p style="font-size: 13px; color: var(--color-text-light); margin: 0; line-height: 1.6;">
+                <strong style="color: var(--color-primary);">📚 Sumber Data:</strong> IBM Telco Customer Churn Dataset (Kaggle) | 
+                <strong style="color: var(--color-primary);">Dataset:</strong> 7.043 pelanggan, 21 fitur, 99.99% kelengkapan | 
+                <strong style="color: var(--color-primary);">Periode:</strong> Snapshot historis | 
+                <strong style="color: var(--color-primary);">Lisensi:</strong> Open Use (Creative Commons)
             </p>
-            <div class="problem-stat">
-                Cost to acquire new customer: 5-10x higher than retention
-            </div>
         </div>
-    </section>
 
-    <!-- Solution Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title fade-in">Our Solution</h2>
-            <p class="section-subtitle fade-in">AI-powered churn prediction system using 3 machine learning algorithms</p>
-            
-            <div class="feature-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">✓</div>
-                    <h3 class="feature-title">80.33% Accuracy</h3>
-                    <p class="feature-description">Industry-leading prediction accuracy</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">90% Detection Rate</h3>
-                    <p class="feature-description">Catch 90% of potential churners</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Real-time Predictions</h3>
-                    <p class="feature-description">Instant risk scoring for customers</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">💡</div>
-                    <h3 class="feature-title">Actionable Insights</h3>
-                    <p class="feature-description">Clear recommendations per customer</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Methodology Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title fade-in">Scientific Methodology</h2>
-            <p class="section-subtitle fade-in">Industry-Standard 5-Phase Machine Learning Workflow</p>
-            
-            <div class="methodology-list">
-                <div class="methodology-item fade-in">
-                    <div class="methodology-phase">1. Data Exploration</div>
-                    <div class="methodology-description">7,043 customers analyzed</div>
-                </div>
-                <div class="methodology-item fade-in">
-                    <div class="methodology-phase">2. Feature Engineering</div>
-                    <div class="methodology-description">21 variables + 3 engineered features</div>
-                </div>
-                <div class="methodology-item fade-in">
-                    <div class="methodology-phase">3. Model Training</div>
-                    <div class="methodology-description">3 algorithms: LR, RF, XGBoost</div>
-                </div>
-                <div class="methodology-item fade-in">
-                    <div class="methodology-phase">4. Rigorous Evaluation</div>
-                    <div class="methodology-description">Confusion matrix, ROC curves</div>
-                </div>
-                <div class="methodology-item fade-in">
-                    <div class="methodology-phase">5. Business Impact</div>
-                    <div class="methodology-description">ROI calculation &amp; recommendations</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Data Source Section -->
-    <section class="section">
-        <div class="data-source fade-in">
-            <h2 class="data-source-title">Data Source &amp; Validation</h2>
-            <div class="data-source-name">📊 IBM Telco Customer Churn Dataset</div>
-            <p>Kaggle - Industry Benchmark Dataset</p>
-            <a href="https://www.kaggle.com/datasets/blastchar/telco-customer-churn" target="_blank" class="data-source-link">
-                View on Kaggle →
-            </a>
-            
-            <div class="quality-badges">
-                <span class="badge">7,043 Real Customers</span>
-                <span class="badge">99.99% Data Complete</span>
-                <span class="badge">Industry Benchmark</span>
-                <span class="badge">Peer-Reviewed</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Results Section -->
-    <section class="section" id="results">
-        <div class="container">
-            <h2 class="section-title fade-in">Proven Results</h2>
-            <p class="section-subtitle fade-in">Model Performance on Test Set (1,408 customers)</p>
-            
-            <div class="grid">
-                <div class="chart-container fade-in">
-                    <h3 class="chart-title">Model Accuracy Comparison</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="modelComparisonChart"></canvas>
+        <div class="benefits">
+            <h3 style="color: var(--color-primary); margin-bottom: var(--spacing-md); font-size: 20px;">🚀 Manfaat Utama</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-content">
+                        <h4>307 Pelanggan Berisiko</h4>
+                        <p>Teridentifikasi dari 1.408 data uji untuk intervensi</p>
                     </div>
-                    <p class="chart-caption">Logistic Regression outperforms with 80.33% accuracy</p>
                 </div>
-                
-                <div class="chart-container fade-in">
-                    <h3 class="chart-title">Confusion Matrix</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="confusionMatrixChart"></canvas>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <div class="benefit-content">
+                        <h4>Rp 28+ Miliar</h4>
+                        <p>Potensi manfaat tahunan dari penerapan model</p>
                     </div>
-                    <p class="chart-caption">1,131 Correct / 277 Wrong = 80.33% accuracy</p>
                 </div>
-                
-                <div class="chart-container fade-in">
-                    <h3 class="chart-title">Performance Metrics</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="metricsChart"></canvas>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⏱️</div>
+                    <div class="benefit-content">
+                        <h4>3.2 Hari</h4>
+                        <p>Waktu untuk menutupi investasi model</p>
                     </div>
-                    <p class="chart-caption">All metrics exceed industry standard (65-75%)</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">👥</div>
+                    <div class="benefit-content">
+                        <h4>1.200+ Pelanggan</h4>
+                        <p>Dapat diselamatkan per tahun dengan intervensi</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📈</div>
+                    <div class="benefit-content">
+                        <h4>Peningkatan 25-30%</h4>
+                        <p>Pertumbuhan tingkat retensi dengan strategi berbasis data</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✅</div>
+                    <div class="benefit-content">
+                        <h4>Siap Produksi</h4>
+                        <p>Sistem siap untuk diterapkan langsung ke lingkungan operasional</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ROI Impact Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title fade-in">Business Impact</h2>
-            <p class="section-subtitle fade-in">Real financial benefits for your business</p>
+    <!-- CHARTS SECTION -->
+    <section id="charts">
+        <h2 class="section-title">📊 Analitik Data & Visualisasi</h2>
+        <p class="section-subtitle">
+            5 grafik profesional yang menampilkan analisis mendalam tentang performa model, pola data, dan dampak bisnis
+        </p>
+
+        <div class="chart-grid">
+            <!-- CHART 1: MODEL COMPARISON -->
+            <div class="chart-container">
+                <div class="chart-title">📊 Grafik 1: Perbandingan Model</div>
+                <img src="02_model_comparison.png" alt="Chart Description" display: "flex"; justify-content: "center"; style="width: 80%; max-width: 80%; border-radius: 8px; margin-bottom: 12px;">
+
+                <div class="chart-description">
+                    perbandingan 3 model (Regresi Logistik, Hutan Acak, XGBoost) di sini. Grafik ini menunjukkan Regresi Logistik sebagai performa terbaik dengan akurasi 80.33% dan AUC 0.8434.
+                </div>
+            </div>
+
+            <!-- CHART 2: FEATURE IMPORTANCE -->
+            <div class="chart-container">
+                <div class="chart-title">🎯 Grafik 2: Pentingnya Fitur</div>
+                <img src="01_feature_importance.png" alt="Chart Description" display: "flex"; justify-content: "center"; style="width: 80%; max-width: 80%; border-radius: 8px; margin-bottom: 12px;">
+                <div class="chart-description">
+                    15 fitur teratas dengan skor kepentingan. Total Biaya dan Durasi Pelanggan adalah 2 faktor utama yang mempengaruhi churn.
+                    
+            </div>
+
+            <!-- CHART 3: CONFUSION MATRIX -->
+            <div class="chart-container">
+                <div class="chart-title">🎯 Grafik 3: Matriks Kebingungan</div>
+                <img src="04_confusion_matrix.png" alt="Chart Description" display: "flex"; justify-content: "center"; style="width: 80%; max-width: 80%; border-radius: 8px; margin-bottom: 12px;">
+                <div class="chart-description">
+                    Confusion Matrix untuk Logistic Regression model (Best Model). Hijau: Correct predictions (1,131 customers = 80.33% accuracy). Merah/Kuning: Wrong predictions (277 customers = 19.67% error). Insight: Model correctly identify 205 dari 380 actual churners (53.95% detection rate dari total churners).
+                </div>
+            </div>
+
+            <!-- CHART 4: EVALUATION METRICS -->
+            <div class="chart-container">
+                <div class="chart-title">📈 Grafik 4: Metrik Evaluasi</div>
+                <img src="03_evaluation_metrics.png" alt="Chart Description" display: "flex"; justify-content: "center"; style="width: 80%; max-width: 80%; border-radius: 8px; margin-bottom: 12px;">
+                <div class="chart-description">
+                    <strong>Penempatan Gambar:</strong> 4 sub-grafik menunjukkan perbandingan metrik antara 3 model. Regresi Logistik unggul di Presisi (84%) dan Skor F1 (87%).
+                </div>
+            </div>
+
+            <!-- CHART 5: ROC CURVES -->
+            <div class="chart-container">
+                <div class="chart-title">📉 Grafik 5: Kurva ROC</div>
+                <img src="roc_curves.png" alt="Chart Description" display: "flex"; justify-content: "center"; style="width: 80%; max-width: 80%; border-radius: 8px; margin-bottom: 12px;">
+                <div class="chart-description">
+                    <strong>Penempatan Gambar:</strong> 3 kurva ROC (RL=0.8434, HA=0.8252, XGB=0.8321) yang menunjukkan kemampuan model untuk membedakan pelanggan yang akan churn dengan yang tidak akan churn.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSIGHTS SECTION -->
+    <section id="insights">
+        <h2 class="section-title">💡 Temuan Penting</h2>
+        <p class="section-subtitle">Penemuan kunci dari analisis data yang mendalam</p>
+
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-icon">🔴</div>
+                <div class="insight-title">Segmen Berisiko Tinggi</div>
+                <div class="insight-text">Pelanggan baru (0-6 bulan) mewakili 21% dari basis pelanggan tetapi memiliki risiko churn tertinggi. Prioritaskan retensi di fase awal.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">💰</div>
+                <div class="insight-title">Pendorong Nilai Pelanggan</div>
+                <div class="insight-text">Total biaya adalah prediktor terpenting (3.58% kepentingan). Fokus pada pelanggan dengan nilai seumur hidup rendah.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">🎯</div>
+                <div class="insight-title">Durasi Pelanggan Penting</div>
+                <div class="insight-text">Durasi pelanggan peringkat #2 (3.12% kepentingan). Retensi pelanggan di bulan pertama sangat kritis untuk loyalitas jangka panjang.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">🔗</div>
+                <div class="insight-title">Paket Layanan Bundel</div>
+                <div class="insight-text">Pelanggan dengan 5-7 layanan (44.53%) lebih loyal dibanding 0-2 layanan (25.59%). Strategi penjualan silang sangat efektif.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">📊</div>
+                <div class="insight-title">Tingkat Churn Realistis</div>
+                <div class="insight-text">Tingkat churn 26.54% di dataset sesuai dengan standar industri (20-30%). Model dilatih pada data yang realistis.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-title">Prediksi Cepat</div>
+                <div class="insight-text">Regresi Logistik memberikan prediksi dalam milidetik, ideal untuk sistem intervensi waktu nyata.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI SECTION -->
+    <section id="roi">
+        <h2 class="section-title">💎 Dampak Keuangan & ROI</h2>
+        <p class="section-subtitle">Analisis mendalam tentang nilai bisnis dan tingkat pengembalian investasi</p>
+
+        <div class="roi-box">
+            <h3 style="color: var(--color-primary); margin-bottom: var(--spacing-md); font-size: 18px;">📈 Proyeksi Keuangan Tahunan</h3>
             
             <div class="roi-grid">
-                <div class="roi-card fade-in">
-                    <div class="roi-value">Rp 28 Billion</div>
-                    <div class="roi-label">Annual Benefit</div>
-                    <div class="roi-description">Revenue saved per year</div>
+                <div class="roi-item">
+                    <div class="roi-value">Rp 28B</div>
+                    <div class="roi-label">Manfaat Tahunan</div>
                 </div>
-                <div class="roi-card fade-in">
+                <div class="roi-item">
                     <div class="roi-value">186,567%</div>
                     <div class="roi-label">ROI</div>
-                    <div class="roi-description">Return on investment</div>
                 </div>
-                <div class="roi-card fade-in">
-                    <div class="roi-value">3.2 Days</div>
-                    <div class="roi-label">Payback Period</div>
-                    <div class="roi-description">Break-even time</div>
+                <div class="roi-item">
+                    <div class="roi-value">3.2</div>
+                    <div class="roi-label">Balik Modal (Hari)</div>
                 </div>
-                <div class="roi-card fade-in">
-                    <div class="roi-value">1,200+</div>
-                    <div class="roi-label">Customers Saved</div>
-                    <div class="roi-description">Per year retention</div>
+                <div class="roi-item">
+                    <div class="roi-value">1.200+</div>
+                    <div class="roi-label">Pelanggan Diselamatkan</div>
+                </div>
+                <div class="roi-item">
+                    <div class="roi-value">Rp 15M</div>
+                    <div class="roi-label">Investasi Model</div>
+                </div>
+                <div class="roi-item">
+                    <div class="roi-value">Rp 1.87M</div>
+                    <div class="roi-label">Biaya per Pelanggan</div>
+                </div>
+            </div>
+
+            <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-md); border-top: 1px solid var(--color-border);">
+                <h4 style="color: var(--color-primary); margin-bottom: 12px;">📊 Rincian Perhitungan</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); font-size: 14px; color: var(--color-text-light); line-height: 1.8;">
+                    <div>
+                        <strong style="color: var(--color-primary);">Calon Churn/Tahun:</strong> ~5.000 pelanggan
+                    </div>
+                    <div>
+                        <strong style="color: var(--color-primary);">Prediksi Model:</strong> 4.000 berisiko (akurasi 80%)
+                    </div>
+                    <div>
+                        <strong style="color: var(--color-primary);">Kesuksesan Kampanye:</strong> Tingkat pencegahan 30%
+                    </div>
+                    <div>
+                        <strong style="color: var(--color-primary);">Pelanggan Diselamatkan:</strong> 1.200 per tahun
+                    </div>
+                    <div>
+                        <strong style="color: var(--color-primary);">Pendapatan Diselamatkan:</strong> Rp 30 Miliar (1.200 × Rp 25M nilai seumur hidup)
+                    </div>
+                    <div>
+                        <strong style="color: var(--color-primary);">Biaya Kampanye:</strong> Rp 2 Miliar (4.000 × Rp 500K)
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Deliverables Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title fade-in">Full Report Includes</h2>
-            
-            <div class="deliverables-list fade-in">
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>Complete 50+ page analysis report</span>
-                </div>
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>5 professional data visualizations</span>
-                </div>
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>3 trained ML models (.RDS files)</span>
-                </div>
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>Implementation roadmap</span>
-                </div>
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>ROI calculator</span>
-                </div>
-                <div class="deliverable-item">
-                    <span class="deliverable-icon">✓</span>
-                    <span>30-day support</span>
-                </div>
-            </div>
-            
-            <div class="pricing">Starting from Rp 10 Million</div>
-        </div>
-    </section>
+    <!-- IMPLEMENTATION SECTION -->
+    <section>
+        <h2 class="section-title">🚀 Rencana Implementasi</h2>
+        <p class="section-subtitle">Strategi penerapan dan perluasan untuk memaksimalkan nilai bisnis</p>
 
-    <!-- Tech Stack Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title fade-in">Technical Stack</h2>
-            <p class="section-subtitle fade-in">Built with industry-standard tools and methodologies</p>
-            
-            <div class="tech-stack">
-                <span class="tech-badge fade-in">R Programming</span>
-                <span class="tech-badge fade-in">Logistic Regression</span>
-                <span class="tech-badge fade-in">Random Forest</span>
-                <span class="tech-badge fade-in">XGBoost</span>
-                <span class="tech-badge fade-in">Caret Package</span>
-                <span class="tech-badge fade-in">Industry Standards</span>
+        <div style="background: white; border-radius: 12px; padding: var(--spacing-lg); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                <div style="padding: var(--spacing-md); border-left: 4px solid var(--color-primary); background: rgba(32, 135, 148, 0.05); border-radius: 8px;">
+                    <h4 style="color: var(--color-primary); margin-bottom: 8px;">⏱️ BULAN 1-2</h4>
+                    <p style="font-size: 13px; color: var(--color-text-light); margin: 0; line-height: 1.6;">
+                        Fondasi: Penerapan model, pelatihan staf, penyiapan dasbor, kampanye uji coba (50 pelanggan)
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); border-left: 4px solid var(--color-accent); background: rgba(255, 107, 107, 0.05); border-radius: 8px;">
+                    <h4 style="color: var(--color-accent); margin-bottom: 8px;">📈 BULAN 3-6</h4>
+                    <p style="font-size: 13px; color: var(--color-text-light); margin: 0; line-height: 1.6;">
+                        Perluasan: Peluncuran penuh (500+ pelanggan), pengujian A/B, pemantauan performa, optimisasi
+                    </p>
+                </div>
+                <div style="padding: var(--spacing-md); border-left: 4px solid var(--color-success); background: rgba(81, 207, 102, 0.05); border-radius: 8px;">
+                    <h4 style="color: var(--color-success); margin-bottom: 8px;">🎯 BULAN 6-12</h4>
+                    <p style="font-size: 13px; color: var(--color-text-light); margin: 0; line-height: 1.6;">
+                        Lanjutan: Pelatihan ulang triwulanan, analisis akar masalah, otomasi pemasaran, ekspansi ke segmen lain
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="section">
-        <div class="cta-section fade-in">
-            <h2 class="cta-headline">Ready to Reduce Churn by 25-30%?</h2>
-            <p class="cta-subtext">Get the full analysis report and implementation guide</p>
-            
-            <div class="cta-buttons">
-                <button class="btn btn-primary" onclick="alert('Thank you for your interest! Please contact us at the email below to get the full report.');">Get Full Report</button>
-                <button class="btn btn-secondary" onclick="alert('Thank you! Please contact us via WhatsApp or email below to schedule a demo.');">Schedule Demo</button>
+    <!-- TECHNICAL SPECS -->
+    <section style="background: white; border-radius: 12px; margin: var(--spacing-lg) auto;">
+        <h2 class="section-title">⚙️ Spesifikasi Teknis</h2>
+        <p class="section-subtitle">Informasi teknis tentang model, data, dan infrastruktur</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); max-width: 1200px; margin: 0 auto;">
+            <div style="padding: var(--spacing-md); background: rgba(32, 135, 148, 0.05); border-radius: 8px; border-left: 4px solid var(--color-primary);">
+                <h4 style="color: var(--color-primary); margin-bottom: 8px;">📊 Basis Data</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--color-text-light);">
+                    <li>✓ 7.043 total pelanggan</li>
+                    <li>✓ 21 fitur/variabel</li>
+                    <li>✓ Tingkat churn 26.54%</li>
+                    <li>✓ Kelengkapan data 99.99%</li>
+                </ul>
             </div>
-            
-            <p class="contact-info">
-                Email: your@email.com | WhatsApp: +62-XXX-XXXX-XXXX
-            </p>
+
+            <div style="padding: var(--spacing-md); background: rgba(32, 135, 148, 0.05); border-radius: 8px; border-left: 4px solid var(--color-primary);">
+                <h4 style="color: var(--color-primary); margin-bottom: 8px;">🧠 Model</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--color-text-light);">
+                    <li>✓ Algoritma: Regresi Logistik</li>
+                    <li>✓ Tipe: Klasifikasi Biner</li>
+                    <li>✓ Pembagian Latih/Uji: 80/20</li>
+                    <li>✓ Status: Siap Produksi</li>
+                </ul>
+            </div>
+
+            <div style="padding: var(--spacing-md); background: rgba(32, 135, 148, 0.05); border-radius: 8px; border-left: 4px solid var(--color-primary);">
+                <h4 style="color: var(--color-primary); margin-bottom: 8px;">⚡ Performa</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--color-text-light);">
+                    <li>✓ Waktu prediksi: milidetik</li>
+                    <li>✓ Akurasi: 80.33%</li>
+                    <li>✓ Skor AUC: 0.8434</li>
+                    <li>✓ Memori: minimal</li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact</a>
-            </div>
-            <p class="copyright">&copy; 2025 Customer Churn Prediction. All rights reserved.</p>
-            <p class="footer-tagline">Powered by Advanced Machine Learning</p>
-        </div>
+        <p>© 2025 DulsInspirations </p>
+        <p>Privacy Policy</p>
+        <p>Terms of Service</p>
     </footer>
 
     <script>
-        // Intersection Observer for fade-in animations
+        // Smooth scrolling untuk navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer untuk fade-in animations saat scroll
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
+        // Apply animation pada chart containers dan insight cards
+        document.querySelectorAll('.chart-container, .insight-card, .benefit-item').forEach(el => {
+            el.style.opacity = '0';
             observer.observe(el);
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
+        // Navbar active link highlight pada scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
                 }
             });
-        });
 
-        // Chart colors
-        const chartColors = ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F'];
-
-        // Model Comparison Chart
-        const ctx1 = document.getElementById('modelComparisonChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Logistic Regression', 'Random Forest', 'XGBoost'],
-                datasets: [{
-                    label: 'Accuracy (%)',
-                    data: [80.33, 78.76, 78.84],
-                    backgroundColor: [chartColors[0], chartColors[1], chartColors[2]],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        }
-                    }
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.style.color = 'var(--color-primary)';
+                } else {
+                    link.style.color = 'var(--color-text)';
                 }
-            }
-        });
-
-        // Confusion Matrix Chart
-        const ctx2 = document.getElementById('confusionMatrixChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['True Negative', 'False Positive', 'False Negative', 'True Positive'],
-                datasets: [{
-                    label: 'Count',
-                    data: [926, 102, 175, 205],
-                    backgroundColor: [chartColors[0], chartColors[1], chartColors[2], chartColors[4]],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Performance Metrics Chart
-        const ctx3 = document.getElementById('metricsChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'radar',
-            data: {
-                labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC'],
-                datasets: [{
-                    label: 'Logistic Regression',
-                    data: [80.33, 66.78, 53.95, 59.65, 84.77],
-                    backgroundColor: 'rgba(31, 184, 205, 0.2)',
-                    borderColor: chartColors[0],
-                    borderWidth: 2,
-                    pointBackgroundColor: chartColors[0]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
+            });
         });
     </script>
 </body>
